@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToA First Run Guide — 150 Duo</title>
+<style>
+  :root {
+    --bg: #1a1410;
+    --bg-card: #241c16;
+    --bg-card-2: #2d231c;
+    --gold: #d4af37;
+    --gold-bright: #ffd966;
+    --text: #e8dcc4;
+    --text-dim: #b8a890;
+    --border: #4a3826;
+    --red: #ff5252;
+    --green: #66ff66;
+    --blue: #4fb8ff;
+    --purple: #c77dff;
+    --white: #f0f0f0;
+    --yellow: #ffeb3b;
+    --orange: #ff9800;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+    line-height: 1.55;
+    font-size: 16px;
+  }
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+  header {
+    text-align: center;
+    padding: 32px 20px 20px;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 24px;
+  }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 2.4em;
+    color: var(--gold-bright);
+    text-shadow: 2px 2px 0 #000;
+    letter-spacing: 1px;
+  }
+  header .subtitle {
+    color: var(--text-dim);
+    font-size: 1.1em;
+  }
+  nav.toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+  }
+
+  .back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.4em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 100;
+  }
+  .back-to-top.visible {
+    opacity: 0.85;
+    pointer-events: auto;
+  }
+  .back-to-top:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    background: var(--gold-bright);
+  }
+  nav.toc h2 {
+    margin: 0 0 8px;
+    color: var(--gold);
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  nav.toc ol {
+    margin: 0;
+    padding-left: 20px;
+    columns: 2;
+    column-gap: 20px;
+  }
+  nav.toc a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95em;
+  }
+  nav.toc a:hover { color: var(--gold-bright); }
+  section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  section h2 {
+    margin: 0 0 16px;
+    color: var(--gold-bright);
+    font-size: 1.5em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section h2::before {
+    content: "▼";
+    font-size: 0.7em;
+    color: var(--gold);
+    transition: transform 0.15s ease;
+    display: inline-block;
+  }
+  section.collapsed h2 {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  section.collapsed h2::before {
+    transform: rotate(-90deg);
+  }
+  section.collapsed > *:not(h2) {
+    display: none !important;
+  }
+  section h2:hover { color: #fff; }
+
+  .toc-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 0.85em;
+  }
+  .toc-controls button {
+    background: var(--bg-card-2);
+    color: var(--gold);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .toc-controls button:hover {
+    background: var(--gold);
+    color: var(--bg);
+  }
+  section h3 {
+    color: var(--gold);
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-size: 1.15em;
+  }
+  section.boss { border-left-color: var(--orange); }
+  section.boss h2 { color: var(--orange); }
+  section.restock { border-left-color: var(--green); background: var(--bg-card-2); }
+  section.restock h2 { color: var(--green); }
+  section.warning { border-left-color: var(--red); }
+  section.warning h2 { color: var(--red); }
+
+  ul, ol { padding-left: 22px; }
+  li { margin-bottom: 4px; }
+
+  code {
+    background: #000;
+    color: var(--gold-bright);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #000;
+    color: var(--gold-bright);
+    padding: 12px 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 1.05em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    background: #1a1410;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: #000;
+    color: var(--gold);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #2a1f17; }
+
+  .pray-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #000;
+  }
+  .pray-melee { background: var(--red); }
+  .pray-range { background: var(--green); }
+  .pray-magic { background: var(--blue); color: #fff; }
+  .pray-dodge { background: var(--white); }
+
+  .dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 4px;
+    border: 1px solid #000;
+  }
+  .dot-red { background: var(--red); }
+  .dot-green { background: var(--green); }
+  .dot-blue { background: var(--blue); }
+  .dot-white { background: var(--white); }
+  .dot-purple { background: var(--purple); }
+  .dot-yellow { background: var(--yellow); }
+  .dot-black { background: #000; border-color: #555; }
+
+  .callout {
+    background: #3a2a1a;
+    border-left: 4px solid var(--gold);
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .callout.warning {
+    background: #3a1a1a;
+    border-left-color: var(--red);
+  }
+  .callout.tip {
+    background: #1a3a2a;
+    border-left-color: var(--green);
+  }
+  .callout strong {
+    color: var(--gold-bright);
+  }
+  .callout.warning strong { color: var(--red); }
+  .callout.tip strong { color: var(--green); }
+
+  .phase {
+    background: #1a1410;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .phase h4 {
+    margin: 0 0 8px;
+    color: var(--gold-bright);
+    font-size: 1.05em;
+  }
+
+  .checklist {
+    list-style: none;
+    padding-left: 0;
+  }
+  .checklist li {
+    padding: 6px 0 6px 28px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 1.3em;
+    line-height: 1;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    nav.toc ol { columns: 1; }
+    header h1 { font-size: 1.8em; }
+  }
+
+  .order-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    background: #000;
+    padding: 14px;
+    border-radius: 6px;
+    margin: 16px 0;
+    font-weight: bold;
+  }
+  .order-flow span {
+    padding: 6px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    color: var(--gold-bright);
+  }
+  .order-flow .arrow { background: none; border: none; color: var(--gold); }
+  .order-flow .restock-step {
+    background: #1a3a2a;
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .item-img {
+    height: 28px;
+    vertical-align: middle;
+    margin-right: 6px;
+    image-rendering: pixelated;
+  }
+  .item-img-lg {
+    height: 40px;
+    vertical-align: middle;
+    margin-right: 8px;
+    image-rendering: pixelated;
+  }
+  .boss-img {
+    max-width: 140px;
+    float: right;
+    margin: 0 0 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    image-rendering: pixelated;
+  }
+  a.wiki {
+    color: var(--gold-bright);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--gold);
+  }
+  a.wiki:hover { color: #fff; border-bottom-color: #fff; }
+  .ghost-table img { height: 28px; image-rendering: pixelated; }
+
+  .spirit-img {
+    height: 64px;
+    vertical-align: middle;
+    margin-right: 12px;
+    border-radius: 50%;
+  }
+  .spirit-img-sm {
+    height: 36px;
+    vertical-align: middle;
+    margin-right: 8px;
+    border-radius: 50%;
+  }
+
+  .avoid-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .avoid-row {
+    background: #1a1410;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+  }
+  .avoid-row .label {
+    display: inline-block;
+    min-width: 170px;
+    color: var(--gold-bright);
+    font-weight: bold;
+    font-size: 0.95em;
+    margin-right: 8px;
+  }
+  .avoid-row.state    { border-left-color: var(--purple); }
+  .avoid-row.tile     { border-left-color: var(--orange); }
+  .avoid-row.proj     { border-left-color: var(--blue); }
+  .avoid-row.anim     { border-left-color: var(--red); }
+  .avoid-row.hp       { border-left-color: var(--green); }
+  .avoid-row.phase    { border-left-color: var(--yellow); }
+  .avoid-row.state .label    { color: var(--purple); }
+  .avoid-row.tile .label     { color: var(--orange); }
+  .avoid-row.proj .label     { color: var(--blue); }
+  .avoid-row.anim .label     { color: var(--red); }
+  .avoid-row.hp .label       { color: var(--green); }
+  .avoid-row.phase .label    { color: var(--yellow); }
+
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9em;
+    padding: 24px;
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>⚔ <a class="wiki" href="https://oldschool.runescape.wiki/w/Tombs_of_Amascut" target="_blank">Tombs of Amascut</a> ⚔</h1>
+  <div class="subtitle">First Run Guide · 150 Invocations</div>
+  <div style="margin-top: 10px; font-size: 0.85em;">
+    <a class="wiki" href="https://oldschool.runescape.wiki/w/Tombs_of_Amascut/Strategies" target="_blank">Full wiki strategy</a> ·
+    <a class="wiki" href="150toa.png" target="_blank">📋 Easiest 150 invocations</a> ·
+    <a class="wiki" href="https://oldschool.runescape.wiki/w/Chest_(Tombs_of_Amascut)#Loot_table" target="_blank">Rewards</a>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <div class="toc-controls">
+    <button onclick="setAllSections(false)">⊞ Expand all</button>
+    <button onclick="setAllSections(true)">⊟ Collapse all</button>
+  </div>
+  <ol>
+    <li><a href="#shopping">Shopping list</a></li>
+    <li><a href="#travel">Getting there</a></li>
+    <li><a href="#prep">Before starting the raid</a></li>
+    <li><a href="#order">Room order</a></li>
+    <li><a href="#invos">Invocation cheat sheet</a></li>
+    <li><a href="#prayer">Color &amp; prayer readout</a></li>
+    <li><a href="#plugins">Plugins</a></li>
+    <li><a href="#akkha">1. Path of Het (Akkha)</a></li>
+    <li><a href="#kephri">2. Path of Scabaras (Kephri)</a></li>
+    <li><a href="#restock-1">👻 Supply Ghost</a></li>
+    <li><a href="#zebak">3. Path of Crondis (Zebak)</a></li>
+    <li><a href="#baba">4. Path of Apmeken (Ba-Ba)</a></li>
+    <li><a href="#restock-2">👻 Supply Ghost</a></li>
+    <li><a href="#wardens">5. Wardens</a></li>
+    <li><a href="#reset">If it all goes wrong</a></li>
+  </ol>
+</nav>
+
+<section id="shopping">
+  <h2>1. Shopping List</h2>
+  <p>Wear all of it. Don't bother with switches — your serpentine helm + powered staff covers magic so you don't need a spellbook or rune pouch.</p>
+
+  <h3>Equipment (locked in)</h3>
+  <table>
+    <tr><th>Slot</th><th>Item</th><th>Why</th></tr>
+    <tr><td>Helm</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Serpentine_helm_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Serpentine_helm" target="_blank">Serpentine helm</a></td><td>All-styles, venom immune (only helm you need)</td></tr>
+    <tr><td>Body</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Eclipse_moon_chestplate_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Eclipse_moon_chestplate" target="_blank">Eclipse Moon chestplate</a></td><td>Melee body, fine for full raid</td></tr>
+    <tr><td>Legs</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Eclipse_moon_tassets_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Eclipse_moon_tassets" target="_blank">Eclipse Moon tassets</a></td><td>Matches set bonus</td></tr>
+    <tr><td>Boots</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Dragon_boots_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Dragon_boots" target="_blank">Dragon boots</a></td><td>Strength + cheap</td></tr>
+    <tr><td>Amulet</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Amulet_of_fury_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Amulet_of_fury" target="_blank">Amulet of fury</a></td><td>All-styles, great defence</td></tr>
+    <tr><td>Cape (equipped)</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Ava%27s_assembler_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Ava%27s_assembler" target="_blank">Ava's assembler</a></td><td>Ranged bonus + ammo recovery for blowpipe/crossbow</td></tr>
+    <tr><td>Gloves</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Barrows_gloves_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Barrows_gloves" target="_blank">Barrows gloves</a></td><td>All-styles BiS for the price</td></tr>
+    <tr><td>Ring</td><td><img class="item-img" src="https://oldschool.runescape.wiki/images/Lightbearer_detail.png" alt=""><a class="wiki" href="https://oldschool.runescape.wiki/w/Lightbearer" target="_blank">Lightbearer</a></td><td>Doubles spec regen — busted for the BGS/DDS/Eye-of-Ayak rotations</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <strong>🛡️ No offhand / shield / defender on purpose.</strong> Every weapon you're bringing is two-handed (Fang, blowpipe, Eye of Ayak) or one-handed without a paired offhand (DDS, Keris). Skipping defenders/shields cuts your switches roughly in half — and the Wardens P3 enrage gets <em>fast</em>, so fewer slots to think about = fewer mistakes. Add an offhand later once you've got a few kills under your belt.
+  </div>
+
+  <h3>Inventory — weapons + cape swap</h3>
+  <ul>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Osmumten%27s_fang_detail.png" alt=""><strong><a class="wiki" href="https://oldschool.runescape.wiki/w/Osmumten%27s_fang" target="_blank">Osmumten's Fang</a></strong> — main melee (slash style)</li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Eye_of_ayak_detail.png" alt=""><strong><a class="wiki" href="https://oldschool.runescape.wiki/w/Eye_of_Ayak" target="_blank">Eye of Ayak</a></strong> — magic (powered staff, no spellbook needed; charge with <strong>2,500 <a class="wiki" href="https://oldschool.runescape.wiki/w/Demon_tear" target="_blank">Demon tears</a></strong> at the altar before going)</li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Toxic_blowpipe_detail.png" alt=""><strong><a class="wiki" href="https://oldschool.runescape.wiki/w/Toxic_blowpipe" target="_blank">Toxic blowpipe</a></strong> — ranged DPS</li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Dragon_crossbow_detail.png" alt=""><strong><a class="wiki" href="https://oldschool.runescape.wiki/w/Dragon_crossbow" target="_blank">Dragon crossbow</a> + <a class="wiki" href="https://oldschool.runescape.wiki/w/Ruby_dragon_bolts_(e)" target="_blank">ruby (e) bolts</a></strong> — warden core opening spec</li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Dragon_dagger_detail.png" alt=""><strong><a class="wiki" href="https://oldschool.runescape.wiki/w/Dragon_dagger" target="_blank">Dragon dagger</a></strong> — backup spec</li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Keris_partisan_detail.png" alt=""><strong><a class="wiki" href="https://oldschool.runescape.wiki/w/Keris_partisan" target="_blank">Keris partisan</a></strong> — Kephri only</li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Imbued_saradomin_cape.png" alt=""><strong><a class="wiki" href="https://oldschool.runescape.wiki/w/Imbued_god_cape" target="_blank">Mage Arena cape</a></strong> — swap in when casting with Eye of Ayak for the magic damage bonus</li>
+  </ul>
+
+  <h3>Inventory supplies</h3>
+  <ul class="checklist">
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Super_combat_potion%284%29.png" alt="">1 × <a class="wiki" href="https://oldschool.runescape.wiki/w/Super_combat_potion" target="_blank">Super combat potion</a></li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Ranging_potion%284%29.png" alt="">1 × <a class="wiki" href="https://oldschool.runescape.wiki/w/Ranging_potion" target="_blank">Ranging potion</a></li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Sanfew_serum%284%29.png" alt="">1 × <a class="wiki" href="https://oldschool.runescape.wiki/w/Sanfew_serum" target="_blank">Sanfew serum</a></li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Saradomin_brew%284%29.png" alt="">~8 × <a class="wiki" href="https://oldschool.runescape.wiki/w/Saradomin_brew" target="_blank">Saradomin brews</a></li>
+    <li><img class="item-img" src="https://oldschool.runescape.wiki/images/Super_restore%284%29.png" alt="">~6 × <a class="wiki" href="https://oldschool.runescape.wiki/w/Super_restore" target="_blank">Super restores</a></li>
+  </ul>
+
+  <h3><img class="spirit-img-sm" src="helpful-spirit.png" alt="Helpful Spirit"> Supply Ghost loot — what to grab (simple)</h3>
+  <table class="ghost-table">
+    <tr><th>Item</th><th>What it does (plain English)</th><th>Grab?</th></tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Honey_locust.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Honey_locust" target="_blank">Honey locust</a></td>
+      <td>Stackable mini-heal: +20 HP and some prayer per dose. Auto-given when you die.</td>
+      <td>✅ Free, take all</td>
+    </tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Ambrosia_%282%29.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Ambrosia" target="_blank">Ambrosia</a></td>
+      <td><strong>PANIC HEAL.</strong> Full HP + prayer + boosts both. Cures poison.</td>
+      <td>⭐ <strong>Top priority — 1 each</strong></td>
+    </tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Blessed_crystal_scarab_%281%29.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Blessed_crystal_scarab" target="_blank">Blessed crystal scarab</a></td>
+      <td>Slow prayer regen: 72 prayer over 24 sec. Set and forget.</td>
+      <td>👍 If extra</td>
+    </tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Liquid_adrenaline_%282%29.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Liquid_adrenaline" target="_blank">Liquid adrenaline</a></td>
+      <td>Halves spec cost for 150 sec. Drink before warden core.</td>
+      <td>⭐ <strong>Grab one — save for warden core</strong></td>
+    </tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Nectar_%284%29.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Nectar" target="_blank">Nectar</a></td>
+      <td>Heals HP but DRAINS your combat stats. Trap potion.</td>
+      <td>❌ Skip</td>
+    </tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Silk_dressing_%282%29.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Silk_dressing" target="_blank">Silk dressing</a></td>
+      <td>Slow heal: 100 HP over 60 sec. Worse than brews.</td>
+      <td>👌 Only if low on heals</td>
+    </tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Smelling_salts_%282%29.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Smelling_salts" target="_blank">Smelling salts</a></td>
+      <td>Super combat + super range + super mage in one. Lasts 8 min.</td>
+      <td>⭐ <strong>Top priority — 1 each</strong></td>
+    </tr>
+    <tr>
+      <td><img src="https://oldschool.runescape.wiki/images/Tears_of_elidinis_%281%29.png" alt=""> <a class="wiki" href="https://oldschool.runescape.wiki/w/Tears_of_Elidinis" target="_blank">Tears of Elidinis</a></td>
+      <td>Restores stats + prayer, 3×3 area (heals your friend too).</td>
+      <td>👍 Useful in duo</td>
+    </tr>
+  </table>
+  <p style="color: var(--text-dim); font-size: 0.95em; margin-top: 8px;">
+    <strong>Priority order:</strong> Ambrosia → Smelling salts → Liquid adrenaline → Tears of Elidinis → fill with Honey locusts/scarabs.
+  </p>
+
+</section>
+
+<section id="prep">
+  <h2>3. Before Starting the Raid</h2>
+  <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+    <img src="pickaxe-drop.png" alt="Dropping pickaxe in Akkha's light maze room" style="width: 180px; height: 180px; border-radius: 50%; border: 2px solid var(--gold); flex-shrink: 0;">
+    <div style="flex: 1; min-width: 240px;">
+      <h3 style="margin-top: 0;">🪓 Drop your pickaxe in Akkha's room</h3>
+      <p>Before doing anything else, bring your best <strong>pickaxe</strong> (dragon / crystal / 3a) into the raid lobby and head into <strong>Akkha's light maze room</strong>. Drop it on the ground inside that room.</p>
+      <ul>
+        <li>The pickaxe <strong>persists across raids</strong> — drop once, use forever.</li>
+        <li>Next raid: walk in, pick it up, mine the seal in the puzzle, drop it back when done.</li>
+        <li>Without one, the puzzle gives you a bronze pickaxe — brutally slow and wastes minutes per raid.</li>
+        <li>85+ Mining with a dragon pickaxe = one-cycle the seal. D pick spec yourself to 85 if needed.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="travel">
+  <h2>2. Getting There</h2>
+  <p><strong>Fairy ring code: <code>AKP</code></strong> → drops you near Sophanem. Follow the path to the Necropolis pyramid (the X on the map).</p>
+  <img src="toa-getting-there.png" alt="Fairy ring AKP to Necropolis route" style="max-width: 100%; border: 1px solid var(--border); border-radius: 4px; margin-top: 10px;">
+</section>
+
+<section id="order">
+  <h2>4. Room Order</h2>
+  <div class="order-flow">
+    <span>Path of Het (Akkha)</span><span class="arrow">→</span>
+    <span>Path of Scabaras (Kephri)</span><span class="arrow">→</span>
+    <span class="restock-step">👻 Supply Ghost</span><span class="arrow">→</span>
+    <span>Path of Crondis (Zebak)</span><span class="arrow">→</span>
+    <span>Path of Apmeken (Ba-Ba)</span><span class="arrow">→</span>
+    <span class="restock-step">👻 Supply Ghost</span><span class="arrow">→</span>
+    <span>Wardens</span>
+  </div>
+  <p style="text-align:center; color: var(--text-dim);">Het and Scabaras are warmups. Stop at the Supply Ghost between halves.</p>
+</section>
+
+<section id="invos">
+  <h2>5. Invocation Cheat Sheet (Your 150)</h2>
+
+  <h3>General</h3>
+  <ul>
+    <li><strong>Softcore Run</strong> — 3 deaths allowed. Safety net.</li>
+    <li><strong>Walk for It</strong> — 40 min timer. Plenty.</li>
+    <li><strong>On a Diet</strong> — no food. Brews/restores only.</li>
+  </ul>
+
+  <h3>Kephri</h3>
+  <ul>
+    <li><strong>Lively Larvae</strong> — 2× ranged scarabs. Pray range, ignore.</li>
+    <li><strong>Blowing Mud</strong> — dung is stronger. Just don't stand in it.</li>
+    <li><strong>Aerial Assault</strong> — fireball becomes 3×3. Move 2 tiles.</li>
+  </ul>
+
+  <h3>Zebak</h3>
+  <ul>
+    <li><strong>Not Just a Head</strong> — blood barrage. Pray mage, run from blood spawns.</li>
+    <li><strong>Blood Thinners</strong> — 3 spawns instead of 1.</li>
+  </ul>
+
+  <h3>Akkha</h3>
+  <p style="color: var(--text-dim);">None — Akkha invos are brutal. Leave off.</p>
+
+  <h3>Ba-Ba</h3>
+  <ul>
+    <li><strong>Feeling Special?</strong> — boss specs more often. React faster.</li>
+    <li><strong>Gotta Have Faith</strong> — sarcophagi hit harder if opened. Kill baboons fast.</li>
+    <li><strong>Jungle Japes</strong> — bananas under feet damage you. Don't slip.</li>
+    <li><strong>Shaking Things Up</strong> — bigger shockwave. Move further.</li>
+  </ul>
+
+  <h3>Wardens</h3>
+  <ul>
+    <li><strong>Ancient Haste</strong> — P1 obelisk charges faster.</li>
+    <li><strong>Overclocked / Overclocked 2</strong> — wardens attack faster in P3.</li>
+  </ul>
+</section>
+
+<section id="plugins">
+  <h2>7. Plugins (set these up first)</h2>
+  <p>Install these from <strong>RuneLite → Configuration → Plugin Hub</strong>. They turn a panic-attack-inducing raid into a paint-by-numbers exercise.</p>
+
+  <h3>Must-have</h3>
+  <ul>
+    <li><strong>Tombs of Amascut</strong> — overlays for puzzles (Akkha beam path, Kephri memory pattern, Baba pillars/vents/DD tile), boss prayer indicators, cracked boulder highlighting, baboon type labels. <em>The single most important plugin.</em></li>
+    <li><strong>Inventory Tags</strong> (built-in) — color your weapons one way, your gear another. Fang/Eye of Ayak/blowpipe in Group 1 (Fill = solid color), armour in Group 2 (Outline = border). Instant style recognition.</li>
+    <li><strong>Dynamic Inventory Tags</strong> (Plugin Hub) — auto-marks items <strong>missing from your switch</strong> based on the weapon you have equipped.</li>
+  </ul>
+
+  <div class="callout tip">
+    <strong>💡 How to read Dynamic Inventory Tags during a raid:</strong>
+    <ul style="margin: 6px 0;">
+      <li><strong>No items highlighted = you have the right equipment on.</strong> Silence is good. Keep playing.</li>
+      <li><strong>Items highlighted = those are missing from your current switch.</strong> Equip them before attacking.</li>
+      <li>It re-checks every time you change weapons, so the highlight updates automatically when you swap to Fang / blowpipe / Eye of Ayak.</li>
+      <li><strong>Set this up at home with your duo loadout BEFORE you go.</strong> Configure one switch per weapon: blowpipe needs ranged top/bottoms/cape/ammo; Fang needs melee body/legs/dboots/fury; Eye of Ayak needs mage cape/bloodbark.</li>
+    </ul>
+  </div>
+
+  <p style="color: var(--text-dim); font-size: 0.9em;"><strong>Heads up:</strong> Dynamic Inventory Tags only ADDS the missing-item tags — it doesn't render them. You also need the base <strong>Inventory Tags</strong> plugin enabled, otherwise nothing shows.</p>
+
+  <h3>Nice to have</h3>
+  <ul>
+    <li><strong>Better NPC Highlight</strong> — color NPCs by what you attack them with (see priority list below).</li>
+    <li><strong>Inventory Setups</strong> — save your whole ToA loadout, one-click load from bank.</li>
+    <li><strong>Quick Prayers</strong> + bind a hotkey — auto-swap prayer for warden projectile flicks.</li>
+    <li><strong>Boss Timers</strong> — countdown for Akkha specials, Zebak roar, etc.</li>
+  </ul>
+
+  <h3>NPC Highlight list — Better NPC Highlight setup</h3>
+  <p>Paste each block into a group in <strong>Better NPC Highlight</strong> with the matching color. Outline color = what to attack with.</p>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 10px 0;">
+    <div class="phase" style="border-left: 4px solid #FF0000;">
+      <h4 style="color: #FF0000;">🔴 Group 1 — MELEE (Fang)</h4>
+      <code style="display:block; white-space: normal;">Ba-Ba, Baboon Thrower, Soldier Scarab, Core, Energy Siphon, Ba-Ba's Shadow</code>
+      <p style="color: var(--text-dim); font-size: 0.85em; margin: 6px 0 0;">Color: <code>#FF0000</code> · Alpha 75</p>
+    </div>
+
+    <div class="phase" style="border-left: 4px solid #00FF00;">
+      <h4 style="color: #00FF00;">🟢 Group 2 — RANGE (Blowpipe)</h4>
+      <code style="display:block; white-space: normal;">Kephri, Zebak, Tumeken's Warden, Baboon Mage, Baboon Shaman, Cursed Baboon, Volatile Baboon, Spitting Scarab, Arcane Scarab, Healer Scarab, Agile Scarab, Scarab Swarm, Tumeken's Warden Phantom, Zebak's Shadow, Kephri's Shadow</code>
+      <p style="color: var(--text-dim); font-size: 0.85em; margin: 6px 0 0;">Color: <code>#00FF00</code> · Alpha 75</p>
+    </div>
+
+    <div class="phase" style="border-left: 4px solid #00FFFF;">
+      <h4 style="color: #00FFFF;">🔵 Group 3 — MAGIC (Eye of Ayak)</h4>
+      <code style="display:block; white-space: normal;">Baboon Brawler, Elidinis' Warden, Elidinis' Warden Phantom</code>
+      <p style="color: var(--text-dim); font-size: 0.85em; margin: 6px 0 0;">Color: <code>#00FFFF</code> · Alpha 75</p>
+    </div>
+
+    <div class="phase" style="border-left: 4px solid #FFFF00;">
+      <h4 style="color: #FFFF00;">🟡 Group 4 — PRIORITY (kill first / don't die)</h4>
+      <code style="display:block; white-space: normal;">Arcane Scarab, Volatile Baboon, Cursed Baboon, Baboon Shaman</code>
+      <p style="color: var(--text-dim); font-size: 0.85em; margin: 6px 0 0;">Color: <code>#FFFF00</code> · Alpha 100 · layers on TOP of their base group. Arcane = kill FIRST. Volatile = NEVER melee.</p>
+    </div>
+  </div>
+
+  <p style="color: var(--text-dim); font-size: 0.9em;"><strong>Akkha not highlighted</strong> — he switches styles, so a single color is misleading. Just mirror his current prayer.</p>
+
+  <h3>Key Remap (Plugin Hub) — tab hotkeys</h3>
+  <p>Speed up gear/spec swaps. Bind these in <strong>Key Remap</strong>:</p>
+  <table>
+    <tr><th>Key</th><th>Tab</th><th>Use during raid</th></tr>
+    <tr><td><code>Q</code></td><td>Prayer</td><td>Flick protection prayers + Piety/Rigour/Augury</td></tr>
+    <tr><td><code>W</code></td><td>Inventory</td><td>Brew, restore, spec weapon swaps</td></tr>
+    <tr><td><code>E</code></td><td>Magic</td><td>Spellbook (not needed if powered-staff only, but bind anyway)</td></tr>
+    <tr><td><code>R</code></td><td>Combat Options</td><td>Spec attack toggle</td></tr>
+    <tr><td><code>T</code></td><td>Equipment</td><td>Check what's equipped during chaotic moments</td></tr>
+    <tr><td><code>F</code></td><td>Stats</td><td>Verify HP/Prayer/Spec at a glance</td></tr>
+  </table>
+
+  <h3>Prayer reorder</h3>
+  <p>Reorder your prayers in the prayer book so the ones you flick most are adjacent. Standard ToA-friendly order:</p>
+  <ul>
+    <li><strong>Protect from Magic / Missiles / Melee</strong> grouped together at the top — for fast flicks during Zebak/Akkha/Wardens.</li>
+    <li><strong>Piety / Rigour / Augury</strong> grouped — single-click to swap offensive prayer when changing styles.</li>
+    <li>Move never-used prayers (Thick Skin, Burst of Strength, Mystic Will etc.) to the bottom so you don't misclick.</li>
+  </ul>
+
+  <h3>OSRS in-game settings</h3>
+  <p>Search the settings panel (gear icon → All settings → search bar) for these and flip them.</p>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin: 10px 0;">
+    <div class="phase">
+      <h4>💚 Health overlay → <strong>Percentage</strong></h4>
+      <img src="setting-percentage-hp.png" alt="Percentage health setting" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; margin: 6px 0;">
+      <p style="margin: 0; font-size: 0.9em;">Search <code>perce*</code>. Switches HP bars from absolute numbers to percentages — way easier to read boss thresholds (66%, 33%, 5% enrage) at a glance.</p>
+    </div>
+    <div class="phase">
+      <h4>🎥 Disable camera shake</h4>
+      <img src="setting-screen-shake.png" alt="Disable screen shake settings" style="width: 100%; border: 1px solid var(--border); border-radius: 4px; margin: 6px 0;">
+      <p style="margin: 0; font-size: 0.9em;">Search <code>shake*</code>. Toggle OFF both:
+      <br>· Combat camera shake (Ba-Ba slams, Zebak roar, warden enrage)
+      <br>· Atmospheric camera shake
+      <br>The shake makes flicking prayers WAY harder during the chaos. Off = win.</p>
+    </div>
+  </div>
+</section>
+
+<section id="prayer">
+  <h2>6. Universal Color &amp; Prayer Readout</h2>
+  <p>Same logic the entire raid. When unsure → flick mage.</p>
+  <table>
+    <tr><th>What you see</th><th>Style</th><th>Pray</th></tr>
+    <tr><td><span class="dot dot-green"></span> Green / arrow / spike</td><td>Ranged</td><td><span class="pray-badge pray-range">Protect Missiles</span></td></tr>
+    <tr><td><span class="dot dot-blue"></span> Blue / purple orb / wisp</td><td>Magic</td><td><span class="pray-badge pray-magic">Protect Magic</span></td></tr>
+    <tr><td><span class="dot dot-red"></span> Red skull / scimitar / slash</td><td>Melee</td><td><span class="pray-badge pray-melee">Protect Melee</span></td></tr>
+    <tr><td><span class="dot dot-white"></span> White / <span class="dot dot-black"></span> Black orb</td><td>Special — dodge</td><td><span class="pray-badge pray-dodge">— move feet —</span></td></tr>
+    <tr><td><span class="dot dot-yellow"></span> Lightning</td><td>Special — dodge</td><td><span class="pray-badge pray-dodge">— move feet —</span></td></tr>
+  </table>
+</section>
+
+<section class="boss" id="akkha">
+  <h2>🟢 1. Path of Het (<a class="wiki" href="https://oldschool.runescape.wiki/w/Akkha#Mechanics" target="_blank">Akkha</a>)</h2>
+  <img class="boss-img" src="https://oldschool.runescape.wiki/images/Akkha.png" alt="Akkha">
+
+  <h3>Puzzle — Light Beam</h3>
+  <p>Bounce mirrors so the beam hits the shielded statue. Mine the seal with your pickaxe. Don't stand in the beam or the floating black orbs. (Plugin shows the path.)</p>
+  <div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin: 10px 0;">
+    <img src="mirror-menu.png" alt="Mirror right-click menu" style="width: 180px; border: 1px solid var(--border); border-radius: 4px; flex-shrink: 0;">
+    <div style="flex: 1; min-width: 240px;">
+      <strong>Right-click a mirror — your options:</strong>
+      <ul>
+        <li><strong>Pick-up Mirror</strong> → carry it, then click a tile to drop it there.</li>
+        <li><strong>Push Mirror</strong> → nudges it 1 tile in the direction you're facing. Faster for small adjustments.</li>
+        <li><strong>Rotate-clockwise / -anticlockwise</strong> → spins it 90° to redirect the beam.</li>
+      </ul>
+      <p style="margin: 6px 0; color: var(--text-dim); font-size: 0.9em;"><strong>Tip:</strong> use the plugin overlay to see where the beam ends up — saves you guessing rotations.</p>
+    </div>
+  </div>
+  <div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin: 10px 0;">
+    <img src="akkha-break-barrier.png" alt="Break Barrier on cracked wall" style="width: 180px; border: 1px solid var(--border); border-radius: 4px; flex-shrink: 0;">
+    <div style="flex: 1; min-width: 240px;">
+      <strong>Cracked walls block the beam:</strong>
+      <ul>
+        <li>Right-click → <strong>Break Barrier</strong> with your pickaxe to clear them.</li>
+        <li>Highlighted with a red outline (as in the image).</li>
+        <li>You'll usually need to break 1–2 to open the path for your beam.</li>
+        <li>Same pickaxe rules apply — dragon/crystal is much faster than bronze.</li>
+      </ul>
+    </div>
+  </div>
+  <div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin: 10px 0;">
+    <img src="akkha-mine-seal.png" alt="Mining the seal after beam aligned" style="width: 180px; border: 1px solid var(--border); border-radius: 4px; flex-shrink: 0;">
+    <div style="flex: 1; min-width: 240px;">
+      <strong>Once the beam hits the statue:</strong>
+      <ul>
+        <li>The seal/obelisk drops (glowing yellow as in the image).</li>
+        <li>Click it with your <strong>pickaxe</strong> equipped or in inventory to mine it.</li>
+        <li><strong>85+ Mining + Dragon pick = one-cycle</strong>. D pick spec yourself if you're under 85.</li>
+        <li>The green bar at the top is the puzzle timer — finish before it drains or you wipe.</li>
+      </ul>
+    </div>
+  </div>
+  <div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin: 10px 0;">
+    <img src="akkha-pickaxe-storage.png" alt="Pickaxe storage spot outside boss arena" style="width: 180px; height: 180px; object-fit: cover; border: 2px solid var(--gold); border-radius: 50%; flex-shrink: 0;">
+    <div style="flex: 1; min-width: 240px;">
+      <strong>Drop the pickaxe BEFORE entering the boss arena:</strong>
+      <ul>
+        <li>After mining the seal, walk to the storage alcove <strong>outside the boss arena</strong> (shown in image) and drop your pickaxe on the floor.</li>
+        <li>It stays there <strong>across raids</strong> — pick it up next time you load in.</li>
+        <li>Don't bring the pickaxe into the Akkha fight itself — it's just inventory clutter you can't use.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>How to Damage</h3>
+  <p>You only need <strong>2 styles</strong> post-rework. Use <strong>Fang</strong> + <strong>Blowpipe</strong>. Mirror his prayer, attack with the other style.</p>
+  <table>
+    <tr><th>Akkha prays</th><th>You pray</th><th>You attack with</th><th>Example</th></tr>
+    <tr>
+      <td><span class="pray-badge pray-melee">Melee</span></td>
+      <td><span class="pray-badge pray-melee">Melee</span></td>
+      <td>Fang or Blowpipe (not melee)</td>
+      <td><img src="akkha-pray-melee.png" alt="Akkha melee prayer" style="height: 100px; border-radius: 4px; border: 1px solid var(--border);"></td>
+    </tr>
+    <tr>
+      <td><span class="pray-badge pray-range">Range</span></td>
+      <td><span class="pray-badge pray-range">Range</span></td>
+      <td>Fang</td>
+      <td><img src="akkha-pray-range.png" alt="Akkha range prayer" style="height: 100px; border-radius: 4px; border: 1px solid var(--border);"></td>
+    </tr>
+    <tr>
+      <td><span class="pray-badge pray-magic">Magic</span></td>
+      <td><span class="pray-badge pray-magic">Magic</span></td>
+      <td>Fang</td>
+      <td><img src="akkha-pray-magic.png" alt="Akkha magic prayer" style="height: 100px; border-radius: 4px; border: 1px solid var(--border);"></td>
+    </tr>
+  </table>
+
+  <h3>What to Avoid</h3>
+  <p style="color: var(--text-dim); font-size: 0.9em;">6 normal attacks per cycle, then 1 special. He cycles Melee → Range → Magic. Mirror his prayer.</p>
+  <div class="avoid-grid">
+    <div class="avoid-row state"><span class="label">🧍 You turn DARK</span>Trailing orbs. <strong>STAND STILL.</strong> Don't move = no orbs spawn.</div>
+    <div class="avoid-row state"><span class="label">🧍 You turn WHITE (duo)</span>Detonate. Don't stand in the same row/column as your friend — or stack on one tile to share.</div>
+    <div class="avoid-row anim"><span class="label">👹 Boss teleports away</span>Memory Blast (Simon Says). Watch quadrants light up, stand in the matching ones in order, OR run through the safe gaps. <a class="wiki" href="#akkha-blast-3d">↓ see video below</a></div>
+    <div class="avoid-row tile"><span class="label">🟫 Element effects (from missed memory)</span>🔥 Fire = burn DoT · 🟣 Shadow = stat drain · ⚡ Lightning = prayer off · ❄ Ice = slow attack.</div>
+    <div class="avoid-row hp"><span class="label">❤️ 80% / 60% / 40% / 20% HP</span>Quadrant invuln. 4 shadows spawn in corners — kill ONE, then lure Akkha into that empty quadrant to damage him.</div>
+    <div class="avoid-row phase"><span class="label">🔄 Final phase (0 HP → +20%)</span>Boss restores 20% HP and hides in a quadrant. Pray <span class="pray-badge pray-magic">Magic</span>. Walk slowly between white orbs (capped at 25 dmg). 3+ successful hits needed.</div>
+  </div>
+
+  <div class="callout tip"><strong>Position:</strong> Stay center. Move to a quadrant only during memory phase. No multi-hit weapons in final phase (causes more teleports).</div>
+
+  <h3 id="akkha-blast-3d">🌀 Memory Blast — video example</h3>
+  <div style="display: flex; justify-content: center; margin: 10px 0;">
+    <iframe
+      width="315"
+      height="560"
+      src="https://www.youtube.com/embed/gTl9vp6VRyM"
+      title="Akkha Memory Blast example"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+      style="border-radius: 8px; border: 1px solid var(--border); max-width: 100%;">
+    </iframe>
+  </div>
+</section>
+
+<section class="boss" id="kephri">
+  <h2>🟢 2. Path of Scabaras (<a class="wiki" href="https://oldschool.runescape.wiki/w/Kephri#Mechanics" target="_blank">Kephri</a>)</h2>
+  <img class="boss-img" src="https://oldschool.runescape.wiki/images/Kephri.png" alt="Kephri">
+
+  <h3>Puzzle — Bug Room</h3>
+  <p>Plugin shows everything. Memory grid → match order. Obelisks → trial &amp; error. Pressure plates → light all. Maths → step on numbers summing to target. Final = matching pairs (split boards, call out symbols).</p>
+
+  <h3>How to Damage</h3>
+  <p>Equip <strong>Keris partisan</strong>, pray <span class="pray-badge pray-range">Range</span>.</p>
+
+  <h3>Duo Group Strategy</h3>
+  <ul>
+    <li><strong>Player A:</strong> stays on Kephri 100% — DPS the body.</li>
+    <li><strong>Player B:</strong> handles intermission scarabs while A finishes shield.</li>
+    <li>During intermissions BOTH attack the called scarab.</li>
+    <li><strong>Stack on the SAME corner for dung.</strong> Agree "SW corner" before pulling. Dung doubles instead of blocking arena.</li>
+  </ul>
+
+  <h3>What to Avoid</h3>
+  <p style="color: var(--text-dim); font-size: 0.9em;">Pray <span class="pray-badge pray-range">Range</span> the whole shield phase. Kephri has <strong>40% weakness to fire spells</strong> if you ever bring magic.</p>
+  <div class="avoid-grid">
+    <div class="avoid-row state"><span class="label">🧍 Shadow under you</span>Fireball incoming. Step 1 tile sideways (or 2 with Aerial Assault).</div>
+    <div class="avoid-row tile"><span class="label">🟫 Dung carpet (flies buzzing)</span>Get knocked back. Run to your designated corner — stack dung in the same corner all fight to keep arena open.</div>
+    <div class="avoid-row tile"><span class="label">🟫 Eggs (Mass Incubation)</span>Kill the LARGE dark eggs before they hatch into Agile Scarabs. Don't stand next to small dormant eggs — they damage if popped.</div>
+    <div class="avoid-row anim"><span class="label">👹 Shield breaks</span>Boss invuln, intermission scarabs spawn.</div>
+    <div class="avoid-row phase"><span class="label">🔄 Intermission scarabs</span>
+      <strong>Spitting</strong> = ranged · <strong>Arcane</strong> = nullifies your magic (kill FIRST) · <strong>Soldier</strong> = melee (pray melee while killing) · <strong>Healer</strong> = heals Kephri (kill if you can).
+    </div>
+    <div class="avoid-row hp"><span class="label">❤️ Green HP bar</span>Final phase. Kephri no longer regens — just burn it down.</div>
+  </div>
+
+  <div class="callout tip"><strong>Position:</strong> Stand on your dung corner from the start (5×5 arena). Move only for shadows.</div>
+</section>
+
+<section class="restock" id="restock-1">
+  <h2><img class="spirit-img-sm" src="helpful-spirit.png" alt="Helpful Spirit"> Supply Ghost — Helpful Spirit</h2>
+  <p>Dump junk in the urn. Grab in priority:</p>
+  <ol>
+    <li><strong>Ambrosia</strong> (panic heal — one each)</li>
+    <li><strong>Smelling salts</strong> (super-everything potion)</li>
+    <li><strong>Liquid adrenaline</strong> (half spec cost — save for warden core)</li>
+  </ol>
+  <p>Top up brews &amp; restores if low.</p>
+</section>
+
+<section class="boss" id="zebak">
+  <h2>🟢 3. Path of Crondis (<a class="wiki" href="https://oldschool.runescape.wiki/w/Zebak#Mechanics" target="_blank">Zebak</a>)</h2>
+  <img class="boss-img" src="https://oldschool.runescape.wiki/images/Zebak.png" alt="Zebak">
+
+  <h3>Puzzle</h3>
+  <p>Grab jug, wait for spike pattern, run through in <strong>one click</strong>, water plant. Kill crocs with Eye of Ayak. 2 trips.</p>
+
+  <h3>How to Damage</h3>
+  <p><strong>Blowpipe + ranged gear.</strong> Stay out of melee range — he hits hard up close.</p>
+
+  <h3>Prayer Flicks</h3>
+  <table>
+    <tr><th>What you see</th><th>Pray</th></tr>
+    <tr><td><span class="dot dot-red"></span> Red orb flying at you</td><td><span class="pray-badge pray-magic">Magic</span></td></tr>
+    <tr><td><span class="dot dot-white"></span> Grey rock flying at you</td><td><span class="pray-badge pray-range">Range</span></td></tr>
+  </table>
+  <p>Hold prayer until it splats. Don't flick early.</p>
+
+  <h3>What to Avoid</h3>
+  <p style="color: var(--text-dim); font-size: 0.9em;">Specials trigger at <strong>85% / 70% / 55% / 40% HP</strong>. Stay out of melee range — melee hits cause <strong>bleeding</strong> (more damage if you move).</p>
+  <div class="avoid-grid">
+    <div class="avoid-row state"><span class="label">🧍 Bleeding (red splash)</span>You got meleed. Move LESS, not more — movement increases bleed damage. If you also get hit by a Tidal Wave while bleeding = "Bloody Waves" (much worse).</div>
+    <div class="avoid-row tile"><span class="label">🟫 Acid pools on floor</span>Never stand in it. Cleared by smashing water jugs into the acid stones.</div>
+    <div class="avoid-row tile"><span class="label">🟫 Blood spawns (invo)</span>Chase you. Run, pray mage during blood barrage.</div>
+    <div class="avoid-row proj"><span class="label">🎯 Pot of red orbs (magic)</span>Pray <span class="pray-badge pray-magic">Magic</span>. Hold until splat.</div>
+    <div class="avoid-row proj"><span class="label">🎯 Large rock splintering (range)</span>Pray <span class="pray-badge pray-range">Range</span>. Hold until splat.</div>
+    <div class="avoid-row anim"><span class="label">👹 Great Roar (3 stones drop)</span>Push water jugs into the stones within <strong>4 attack cycles</strong> (5×5 clear, or 3×3 with Upset Stomach). <strong>Stand behind a cleared rock</strong> before he roars or huge knockback damage.</div>
+    <div class="avoid-row anim"><span class="label">👹 Tidal Wave</span>Waves cross the arena — run through the gaps. If hit: 6–10 dmg + pushed toward water. If pushed in, scale back up fast (can't attack from water).</div>
+    <div class="avoid-row hp"><span class="label">❤️ ~25% HP (Enrage)</span>Attack speed ramps up significantly. Tighten prayer flicks.</div>
+  </div>
+
+  <div class="callout tip"><strong>Position:</strong> NE or NW corner. Stay range-distance — melee proximity = bleeding.</div>
+</section>
+
+<section class="boss" id="baba">
+  <h2>🟢 4. Path of Apmeken (<a class="wiki" href="https://oldschool.runescape.wiki/w/Ba-Ba#Mechanics" target="_blank">Ba-Ba</a>)</h2>
+  <img class="boss-img" src="https://oldschool.runescape.wiki/images/Ba-Ba.png" alt="Ba-Ba">
+
+  <h3>Puzzle</h3>
+  <p>Grab hammer + potions from crates. Plugin shows what's broken.</p>
+  <ul>
+    <li><strong>Pillars/vents lit red</strong> → repair with hammer / douse with potion.</li>
+    <li><strong>Corruption (everyone red)</strong> → <strong>STACK on the DD tile</strong> (center).</li>
+    <li><strong>Baboons</strong> (use your color highlights):
+      <ul>
+        <li>Brawler / Mage / Thrower → standard combat triangle</li>
+        <li><strong>Volatile — RANGE ONLY.</strong> Don't melee, it explodes.</li>
+        <li><strong>Cursed / Shaman — range only.</strong></li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>How to Damage</h3>
+  <p><strong>Fang + melee + pray melee</strong> for the entire fight (except boulders).</p>
+
+  <h3>What to Avoid</h3>
+  <p style="color: var(--text-dim); font-size: 0.9em;">Pray <span class="pray-badge pray-melee">Melee</span> the whole fight (except boulders).</p>
+  <div class="avoid-grid">
+    <div class="avoid-row state"><span class="label">🧍 Everyone turns RED</span>Corruption (puzzle room). <strong>STACK on DD tile</strong> (center) immediately.</div>
+    <div class="avoid-row state"><span class="label">🧍 Shadow under you</span>Slam OR falling rock. Run.</div>
+    <div class="avoid-row tile"><span class="label">🟫 Cross-shaped shadow (5×5)</span>Stomp/shockwave. Get out of the cross. With <strong>Shaking Things Up</strong> on it's 7×7 — move further.</div>
+    <div class="avoid-row tile"><span class="label">🟫 Banana on ground (invo)</span>Don't step on it. Damages you.</div>
+    <div class="avoid-row tile"><span class="label">🟫 Pillar/vent lit red (puzzle)</span>Repair pillar with hammer / douse vent with potion. Plugin marks it.</div>
+    <div class="avoid-row proj"><span class="label">🎯 Rock throw (after rockfall)</span>Stand next to <strong>any large debris pile, sarcophagus, baboon, or your friend</strong> — they absorb the throw.</div>
+    <div class="avoid-row anim"><span class="label">👹 Baboons summoned (1–4)</span>Range volatile / cursed / shaman. Standard trio = combat triangle. Don't let them touch the sarcophagi.</div>
+    <div class="avoid-row anim"><span class="label">👹 Sarcophagus opens</span>Discharges projectile spam. Kill baboons fast to prevent.</div>
+    <div class="avoid-row hp"><span class="label">❤️ 66% &amp; 33% HP — Rolling Stones</span>Boulder phase. Swap to ranged + best range prayer (rigour/eagle eye). 1 of 5 boulders per row is <strong>cracked</strong> — that one always max-hits. Shoot it, run through. <strong>Hit her with melee to end the phase early.</strong></div>
+  </div>
+
+  <div class="callout tip"><strong>Position:</strong> Near a rock when possible. Roughly center for boulder phases.</div>
+</section>
+
+<section class="restock" id="restock-2">
+  <h2><img class="spirit-img-sm" src="helpful-spirit.png" alt="Helpful Spirit"> Supply Ghost — Round 2</h2>
+  <p>Same priorities: <strong>Ambrosia → Smelling salts → Liquid adrenaline.</strong> Top up brews/restores.</p>
+</section>
+
+<section class="boss" id="wardens">
+  <h2>🟢 5. Wardens (<a class="wiki" href="https://oldschool.runescape.wiki/w/Elidinis%27_Warden#Mechanics" target="_blank">Elidinis'</a> / <a class="wiki" href="https://oldschool.runescape.wiki/w/Tumeken%27s_Warden#Mechanics" target="_blank">Tumeken's</a>)</h2>
+  <img class="boss-img" src="https://oldschool.runescape.wiki/images/Elidinis%27_Warden.png" alt="Wardens">
+  <p>Three phases. Stay calm. <strong>Don't worry about max DPS — worry about staying alive.</strong></p>
+
+  <div class="phase">
+    <h4>Phase 1 — Obelisk Charging</h4>
+    <p>The obelisk powers up one warden. The trough you stand on determines who you'll fight in P2.</p>
+
+    <div class="callout"><strong>📍 Positioning — THE key decision of the fight</strong>
+      <ul style="margin: 6px 0;">
+        <li><strong>EAST trough</strong> = block Elidinis → fight <strong>Tumeken</strong> in P2 (he chases you, but lower base def — standard learner pick).</li>
+        <li><strong>WEST trough</strong> = block Tumeken → fight <strong>Elidinis</strong> in P2 (less aggressive, more stationary).</li>
+        <li><strong>BOTH players pick the SAME trough.</strong> If you split, both wardens get partially charged and P3 becomes a nightmare.</li>
+        <li>Stand on the trough itself — the obelisk's energy passes through your tile to drain it.</li>
+        <li>Attack the obelisk from there. Don't wander.</li>
+      </ul>
+    </div>
+
+    <div class="avoid-grid">
+      <div class="avoid-row tile"><span class="label">🟫 UFO shadow grid</span>Move OFF your trough briefly when the grid lights up under you, then return. Don't stand and die.</div>
+      <div class="avoid-row proj"><span class="label">🎯 Big orb at duo</span><strong>Stack together</strong> on the trough (splits damage).</div>
+      <div class="avoid-row proj"><span class="label">🎯 Small orb at duo</span><strong>Spread apart</strong> — one of you steps off the trough temporarily.</div>
+      <div class="avoid-row hp"><span class="label">❤️ Obelisk → 0</span>P2 begins. Heal to full, swap gear for the warden you're facing.</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <h4>Phase 2 — Warden Body + Core</h4>
+    <p>You alternate styles each down. Plugin highlights tell you which.</p>
+    <table>
+      <tr><th>Warden prays</th><th>You pray + attack with</th></tr>
+      <tr><td><span class="pray-badge pray-magic">Magic</span></td><td>Pray Magic, blowpipe (range)</td></tr>
+      <tr><td><span class="pray-badge pray-range">Range</span></td><td>Pray Range, Eye of Ayak (magic)</td></tr>
+    </table>
+
+    <p><strong>If you blocked Elidinis:</strong> you face Tumeken's Warden. It uses Protect Melee + Protect Magic — attack with <span class="pray-badge pray-range">Range</span> (blowpipe). It will actively chase you to melee, so kite.<br>
+    <strong>If you blocked Tumeken:</strong> you face Elidinis' Warden. It uses Protect Melee + Protect Missiles — attack with <span class="pray-badge pray-magic">Magic</span> (Eye of Ayak).</p>
+
+    <div class="callout"><strong>📍 Positioning</strong>
+      <ul style="margin: 6px 0;">
+        <li><strong>Pick 2 safe tiles BEFORE the fight starts</strong> — mark them mentally (east and west of arena center, away from edges). Bounce between them to dodge red tiles. The plugin can highlight safe ground.</li>
+        <li><strong>Tumeken chases you</strong> — pull him toward your safe tiles, then sidestep. Don't get sandwiched on the edge.</li>
+        <li><strong>Elidinis is stationary</strong> — pick a tile slightly out of melee range, attack from there, only move for tiles/skull.</li>
+        <li><strong>Duo: stay roughly on the same line</strong> (both N or both S of warden) — makes orb stack/spread clean and lets you both reach the core fast when it pops.</li>
+        <li><strong>When core ejects:</strong> RUN to it (it spawns near the warden body). You only get a short window. Melee is the only style that max-hits.</li>
+        <li><strong>Lightning skull:</strong> step OUT of the shadow when you see it, sprint 7+ tiles, or hug right next to the center (within 2 N/S/E/W).</li>
+      </ul>
+    </div>
+
+    <h4>What to Avoid</h4>
+    <div class="avoid-grid">
+      <div class="avoid-row tile"><span class="label">🟫 Red tiles</span>Step off. Pick 2 safe tiles in advance and bounce between them.</div>
+      <div class="avoid-row tile"><span class="label">🟫 Lightning skull shadow</span>Either 7+ tiles away OR within 2 tiles N/S/E/W of the shadow center.</div>
+      <div class="avoid-row proj"><span class="label">🎯 Red skull</span>Pray <span class="pray-badge pray-range">Range</span></div>
+      <div class="avoid-row proj"><span class="label">🎯 Red scimitar</span>Pray <span class="pray-badge pray-melee">Melee</span></div>
+      <div class="avoid-row proj"><span class="label">🎯 White arrow</span>Pray <span class="pray-badge pray-range">Range</span></div>
+      <div class="avoid-row proj"><span class="label">🎯 Blue spell</span>Pray <span class="pray-badge pray-magic">Magic</span></div>
+      <div class="avoid-row proj"><span class="label">🎯 Black bolt</span><strong>DODGE — no prayer helps.</strong> Side-step the moment you see it. Avoiding it is the trick — if it lands you're frozen, and spam-clicking to break out costs precious time.</div>
+      <div class="avoid-row hp"><span class="label">❤️ Yellow bar → 0</span>CORE EJECTS. <strong>Only melee max-hits the core.</strong> Switch to spec dump (see below). Core stays out longer each ejection.</div>
+    </div>
+
+    <div class="callout warning">
+      <div style="display: flex; align-items: flex-start; gap: 14px;">
+        <img src="dds-core-spec.png" alt="DDS spec hitting 33/33 on the warden core" style="width: 120px; height: 120px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--gold);">
+        <div>
+          <strong>CORE EXPOSED rotation:</strong>
+          <ol style="margin: 6px 0;">
+            <li>Drink Liquid Adrenaline.</li>
+            <li>Equip Fang + Piety.</li>
+            <li><strong>DDS spec → DDS spec</strong> on the exposed core (back-to-back 33/33 hits like in the image).</li>
+            <li>Fang the core till it goes invuln again.</li>
+            <li>Repeat 2–3 times until P3.</li>
+          </ol>
+          <p style="margin: 6px 0;"><strong>Why DDS:</strong> two fast specs both crit for huge damage in the short core window — fastest melee spec burst in the game.</p>
+          <p style="margin: 6px 0;">Bonus: Eye of Ayak's <strong>Soul Rend</strong> spec drains magic def. Pop it on the warden body before mage attacking.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <h4>Phase 3 — Final Confrontation</h4>
+    <p>The OTHER warden (the one you blocked in P1) shows up enraged. Range gear. <strong>No prayers help the floor slams — move your feet.</strong></p>
+
+    <div class="callout"><strong>📍 Positioning — slam dance</strong>
+      <p style="margin: 4px 0;">Slam pattern is <strong>fixed</strong>: left → right → both. You mirror it:</p>
+      <ul style="margin: 4px 0;">
+        <li>Slam <strong>LEFT</strong> → stand <strong>RIGHT</strong> half of arena</li>
+        <li>Slam <strong>RIGHT</strong> → stand <strong>LEFT</strong> half of arena</li>
+        <li>Slam <strong>BOTH</strong> → stand on the <strong>CENTER line</strong> (the seam between halves)</li>
+      </ul>
+      <p style="margin: 4px 0;"><strong>Loop this whole fight.</strong> Hit-step-hit-step. Don't freelance — the pattern is your safety.</p>
+    </div>
+
+    <div class="callout"><strong>📍 Other position rules</strong>
+      <ul style="margin: 6px 0;">
+        <li><strong>Stay front-center of the arena.</strong> Back tiles slowly strip away in enrage — if you're already at the front you don't need to scramble.</li>
+        <li><strong>Energy Siphons</strong> spawn at fixed positions around the arena edge. When called, sprint to each, Fang 1-shot, sprint to next. Plan a clockwise or counter-clockwise route.</li>
+        <li><strong>Phantoms</strong> (Akkha/Kephri or Zebak/Ba-Ba depending on which warden) spawn in the middle/sides — use the same dodge logic as the original boss, but you can't reposition far without breaking slam pattern.</li>
+        <li><strong>Lightning shadows:</strong> step 1 tile off, immediately step back. Don't drift to the edge chasing safe ground.</li>
+        <li><strong>Enrage:</strong> arena collapses to a single front row. Hug the warden, melee + Liquid Adrenaline + spec dump. There is no positioning at this point — survive the slams and tunnel DPS.</li>
+      </ul>
+    </div>
+    <p style="color: var(--text-dim); font-size: 0.9em;">Phantoms use the same dodge/prayer logic as the original boss (Zebak orb/rock flicks, Akkha element effects, etc).</p>
+    <div class="avoid-grid">
+      <div class="avoid-row tile"><span class="label">🟫 Raised floor tiles</span>Pre-enrage attack. Dodge the raised sections.</div>
+      <div class="avoid-row tile"><span class="label">🟫 Red lightning shadow</span>Step off. Hit-move-hit-move. Replaces floor attack during enrage.</div>
+      <div class="avoid-row tile"><span class="label">🟫 Arena edge dissolving (enrage)</span>Stay center/front — back tiles strip away to a single row.</div>
+      <div class="avoid-row tile"><span class="label">🟫 Energy Siphons</span>Don't stand near them. Thralls/pets won't spawn on them.</div>
+      <div class="avoid-row proj"><span class="label">🎯 Phantom projectiles</span>Use the same flicks as that boss's fight (Zebak orbs/rocks, Akkha element attacks, etc).</div>
+      <div class="avoid-row anim"><span class="label">👹 Lightning skull</span>Clear it like P2's skull (7+ tiles away OR within 2 N/S/E/W of center).</div>
+      <div class="avoid-row anim"><span class="label">👹 Phantoms summoned</span>Manage them while DPSing the warden. Don't tunnel vision.</div>
+      <div class="avoid-row hp"><span class="label">❤️ &lt;5% HP — ENRAGE</span>Warden heals 20% HP, defence resets to 180. Lightning replaces floor. Back tiles vanish. <strong>Full melee, get CLOSE, Liquid Adrenaline → spec dump. Drink Ambrosia at &lt;40 HP.</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="warning" id="reset">
+  <h2>If It All Goes Wrong</h2>
+  <ul>
+    <li>Call <strong>"RESET"</strong> out loud → both run to corner → brew up → re-engage.</li>
+    <li>Pray mage if uncertain (covers most stuff).</li>
+    <li>Ambrosia is for using. A dead player heals 0.</li>
+    <li>You will not get the kill the first time. That's normal. Learn the patterns.</li>
+  </ul>
+</section>
+
+<footer>
+  Good luck. GG glhf. 🎯
+</footer>
+
+</div>
+
+<button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+  // show back-to-top after scrolling
+  const backBtn = document.querySelector(".back-to-top");
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 400) backBtn.classList.add("visible");
+    else backBtn.classList.remove("visible");
+  });
+</script>
+
+<script>
+  const STORAGE_KEY = "toa-guide-collapsed";
+
+  function getCollapsedSet() {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+    } catch (_) {
+      return new Set();
+    }
+  }
+
+  function saveCollapsedSet(set) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+  }
+
+  function toggleSection(section) {
+    const collapsed = getCollapsedSet();
+    const id = section.id;
+    section.classList.toggle("collapsed");
+    if (section.classList.contains("collapsed")) {
+      collapsed.add(id);
+    } else {
+      collapsed.delete(id);
+    }
+    saveCollapsedSet(collapsed);
+  }
+
+  function setAllSections(collapse) {
+    const sections = document.querySelectorAll("section");
+    const collapsed = new Set();
+    sections.forEach(s => {
+      if (collapse) {
+        s.classList.add("collapsed");
+        if (s.id) collapsed.add(s.id);
+      } else {
+        s.classList.remove("collapsed");
+      }
+    });
+    saveCollapsedSet(collapsed);
+  }
+
+  // wire up on load
+  const collapsed = getCollapsedSet();
+  document.querySelectorAll("section").forEach(section => {
+    const h2 = section.querySelector("h2");
+    if (!h2) return;
+    h2.addEventListener("click", (e) => {
+      // don't toggle if user clicked a link inside the h2
+      if (e.target.tagName === "A") return;
+      toggleSection(section);
+    });
+    if (section.id && collapsed.has(section.id)) {
+      section.classList.add("collapsed");
+    }
+  });
+
+  // when navigating from TOC, ensure target is expanded
+  document.querySelectorAll('nav.toc a[href^="#"]').forEach(a => {
+    a.addEventListener("click", () => {
+      const id = a.getAttribute("href").slice(1);
+      const target = document.getElementById(id);
+      if (target && target.classList.contains("collapsed")) {
+        toggleSection(target);
+      }
+    });
+  });
+</script>
+</body>
+</html>
